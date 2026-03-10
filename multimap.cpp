@@ -39,13 +39,19 @@ void Multimap::destroyTree(Node* curr)
 
 void Multimap::put(const std::string& key, const std::string& value)
 {
+    if (root == nullptr) {
+        root = new Node(key, value);
+        m_size = 1;
+        return;
+    }
+    
     Node* curr = root;
     while (curr != nullptr) {
         if (key < curr->key)
-            curr = root->left;
+            curr = curr->left;
 
         if (key > curr->key)
-            curr = root->right;
+            curr = curr->right;
 
         if (key == curr->key) {
             for (int i = 0; i < curr->values.size(); i++) {
@@ -54,15 +60,12 @@ void Multimap::put(const std::string& key, const std::string& value)
             }
             curr->values.push_back(value);
             m_size++;
-            break;
+            return;
         }
     }
     
-    if (root == nullptr) {
-        root = new Node(key, value);
-        m_size = 1;
-        return;
-    }
+    curr = new Node(key, value);
+    m_size++;
 }
 
 MultimapBase::IteratorBase* Multimap::get(const std::string& key) const
@@ -70,10 +73,10 @@ MultimapBase::IteratorBase* Multimap::get(const std::string& key) const
     Node* curr = root;
     while (curr != nullptr) {
         if (key < curr->key)
-            curr = root->left;
+            curr = curr->left;
         
         if (key > curr->key)
-            curr = root->right;
+            curr = curr->right;
         
         if (key == curr->key) {
             return new Iterator(curr->values);
