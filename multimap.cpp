@@ -47,13 +47,21 @@ void Multimap::put(const std::string& key, const std::string& value)
     
     Node* curr = root;
     while (curr != nullptr) {
-        if (key < curr->key)
+        if (key < curr->key) {
+            if (curr->left == nullptr) {
+                curr->left = new Node(key, value);
+                m_size++;
+                return;
+            }
             curr = curr->left;
-
-        if (key > curr->key)
+        } else if (key > curr->key) {
+            if (curr->right == nullptr) {
+                curr->right = new Node(key, value);
+                m_size++;
+                return;
+            }
             curr = curr->right;
-
-        if (key == curr->key) {
+        } else {
             for (int i = 0; i < curr->values.size(); i++) {
                 if (value == curr->values[i])
                     return;
@@ -63,22 +71,17 @@ void Multimap::put(const std::string& key, const std::string& value)
             return;
         }
     }
-    
-    curr = new Node(key, value);
-    m_size++;
 }
 
 MultimapBase::IteratorBase* Multimap::get(const std::string& key) const
 {
     Node* curr = root;
     while (curr != nullptr) {
-        if (key < curr->key)
+        if (key < curr->key) {
             curr = curr->left;
-        
-        if (key > curr->key)
+        } else if (key > curr->key) {
             curr = curr->right;
-        
-        if (key == curr->key) {
+        } else {
             return new Iterator(curr->values);
         }
     }
