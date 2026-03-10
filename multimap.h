@@ -38,7 +38,10 @@ private:
         Node* left;
         Node* right;
         
-        Node(const std::string& k, const std::string& v) { key = k; values.push_back(v); }
+        Node(const std::string& k, const std::string& v) : key(k), left(nullptr), right(nullptr)
+        {
+            values.push_back(v);
+        }
     };
     
     Node* root; // the root -> top of the tree
